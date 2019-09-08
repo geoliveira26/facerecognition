@@ -27,8 +27,6 @@ C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\sv\ZedGraph.resources.d
 C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\tr\ZedGraph.resources.dll
 C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\zh-cn\ZedGraph.resources.dll
 C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\zh-tw\ZedGraph.resources.dll
-C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.csprojAssemblyReference.cache
-C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.Form1.resources
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.Properties.Resources.resources
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.csproj.GenerateResource.cache
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.csproj.CoreCompileInputs.cache
@@ -36,3 +34,9 @@ C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.csproj.
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.exe
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.pdb
 C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\assets\haarcascade_frontalface_alt_tree.xml
+C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.FormDetector.resources
+C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\System.Security.AccessControl.dll
+C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\System.Security.Permissions.dll
+C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\System.Security.Principal.Windows.dll
+C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.FormTrainer.resources

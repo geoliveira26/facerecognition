@@ -1,56 +1,58 @@
-﻿using Emgu.CV.CvEnum;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Face;
-using System;
-using System.IO;
+using Emgu.CV.Structure;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace facerecognition
 {
     public class RecognitionService
     {
+        private bool _engineTrained;
         private FaceRecognizer _faceRecognizer;
-        private String _recognizerFilePath;
+        private string _recognizerFilePath = $"{Application.StartupPath}/assets/trained_recognitions.yaml";
 
-        public RecognitionService(String databasePath, String recognizerFilePath)
+        public RecognitionService()
         {
-            _recognizerFilePath = recognizerFilePath;
             _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            TrainRecognizer();
         }
 
-        public void TrainRecognizer()
+        private void TrainRecognizer()
         {
-            var allFaces = _dataStoreAccess.CallFaces("ALL_USERS");
-            if (allFaces == null)
+            if (!RecognitionSingleton.Users.Any())
                 return;
 
-            var faceImages = new Image<Gray, byte>[allFaces.Count];
-            var faceLabels = new int[allFaces.Count];
-            for (int i = 0; i < allFaces.Count; i++)
-            {
-                var stream = new MemoryStream();
-                stream.Write(allFaces[i].Image, 0, allFaces[i].Image.Length);
-                var faceImage = new Image<Gray, byte>(new Bitmap(stream));
-                faceImages[i] = faceImage.Resize(100, 100, Inter.Cubic);
-                faceLabels[i] = allFaces[i].UserId;
-            }
+            var faceImages = new List<Mat>();
+            var faceLabels = new List<int>();
 
-            _faceRecognizer.Train(faceImages, faceLabels);
+            RecognitionSingleton
+                .Users
+                .ForEach(u => u.Photos.ForEach(p =>
+                {
+                    faceImages.Add(p.Resize(100, 100, Inter.Cubic).Mat);
+                    faceLabels.Add(u.Id);
+                }));
+
+            _faceRecognizer.Train(faceImages.ToArray(), faceLabels.ToArray());
             _faceRecognizer.Write(_recognizerFilePath);
+
+            _engineTrained = true;
         }
 
-        public void LoadRecognizerData()
-        {
-            _faceRecognizer.Read(_recognizerFilePath);
-        }
-
-        public int RecognizeUser(Image<Gray, byte> userImage)
+        public int? RecognizeUser(Image<Gray, byte> userImage)
         {
             /*  Stream stream = new MemoryStream();
               stream.Write(userImage, 0, userImage.Length);
               var faceImage = new Image<Gray, byte>(new Bitmap(stream));*/
-            _faceRecognizer.Read(_recognizerFilePath);
+            //_faceRecognizer.Read(_recognizerFilePath);
+            if (!_engineTrained || userImage == null)
+                return null;
 
-            var result = _faceRecognizer.Predict(userImage.Resize(100, 100, Inter.Cubic));
+            _faceRecognizer.Read(_recognizerFilePath);
+            var result = _faceRecognizer.Predict(userImage.Convert<Gray, byte>().Resize(100, 100, Inter.Cubic).Mat);
             return result.Label;
         }
     }
