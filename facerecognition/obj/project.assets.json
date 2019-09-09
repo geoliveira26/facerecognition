@@ -796,11 +796,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\gitprojects\\FaceRecognition\\facerecognition\\facerecognition.csproj",
+      "projectUniqueName": "C:\\gitprojects\\facerecognition\\facerecognition\\facerecognition.csproj",
       "projectName": "facerecognition",
-      "projectPath": "C:\\gitprojects\\FaceRecognition\\facerecognition\\facerecognition.csproj",
+      "projectPath": "C:\\gitprojects\\facerecognition\\facerecognition\\facerecognition.csproj",
       "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
-      "outputPath": "C:\\gitprojects\\FaceRecognition\\facerecognition\\obj\\",
+      "outputPath": "C:\\gitprojects\\facerecognition\\facerecognition\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [

@@ -2,6 +2,7 @@
 using Emgu.CV.CvEnum;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
+using facerecognition.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -42,6 +43,12 @@ namespace facerecognition
             _engineTrained = true;
         }
 
+        public void AddUser(User user)
+        {
+            RecognitionSingleton.Users.Add(user);
+            TrainRecognizer();
+        }
+
         public int? RecognizeUser(Image<Gray, byte> userImage)
         {
             /*  Stream stream = new MemoryStream();
@@ -51,8 +58,7 @@ namespace facerecognition
             if (!_engineTrained || userImage == null)
                 return null;
 
-            _faceRecognizer.Read(_recognizerFilePath);
-            var result = _faceRecognizer.Predict(userImage.Convert<Gray, byte>().Resize(100, 100, Inter.Cubic).Mat);
+            var result = _faceRecognizer.Predict(userImage.Resize(100, 100, Inter.Cubic).Mat);
             return result.Label;
         }
     }

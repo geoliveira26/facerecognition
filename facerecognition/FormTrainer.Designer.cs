@@ -124,8 +124,6 @@
             this.Controls.Add(this.imgUserCam);
             this.Name = "FormTrainer";
             this.Text = "FormTrainer";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTrainer_FormClosing);
-            this.Load += new System.EventHandler(this.FormTrainer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imgUserCam)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.image1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.image2)).EndInit();

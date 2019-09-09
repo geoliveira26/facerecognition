@@ -47,9 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\LiveFeedComponent.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Components\VideoFeed.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="FormDetector.cs">

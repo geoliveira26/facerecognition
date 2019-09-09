@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace facerecognition
 {
-    public partial class FormTrainer : LiveFeedComponent
+    public partial class FormTrainer : Form
     {
         private bool _recognitionComplete = false;
         private Image<Gray, byte> _recognizedImage;
@@ -22,13 +22,11 @@ namespace facerecognition
         public FormTrainer()
         {
             InitializeComponent();
-            
-            //_recognitionService = new RecognitionService();
-        }
 
-        private void FormTrainer_Load(object sender, EventArgs e)
-        {
+            Load += (s, a) => RecognitionSingleton.VideoFeed.OnFaceDetected(OnFaceDetected);
+            FormClosing += (s, a) => RecognitionSingleton.VideoFeed.ClearEvents();
 
+            _recognitionService = new RecognitionService();
         }
 
         private void FillPicture(Image<Gray, byte> image)
@@ -57,7 +55,7 @@ namespace facerecognition
         {
             if (_recognitionComplete)
             {
-                RecognitionSingleton.Users.Add(new User(RecognitionSingleton.Users.Count + 1, _recognizedFaces));
+                _recognitionService.AddUser(new User(textName.Text, _recognizedFaces));
                 CloseForm();
                 return;
             }
@@ -73,13 +71,9 @@ namespace facerecognition
             form.ShowDialog();
             Close();
         }
+        
 
-        private void FormTrainer_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //CloseForm();
-        }
-
-        public override void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, List<Image<Gray, byte>> faces)
+        public void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, List<Image<Gray, byte>> faces)
         {
             buttonRecognize.Invoke(new MethodInvoker(() =>
             {

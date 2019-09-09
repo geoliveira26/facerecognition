@@ -1,26 +1,21 @@
 ﻿using Emgu.CV;
-using Emgu.CV.Face;
 using Emgu.CV.Structure;
-using facerecognition.Components;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace facerecognition
 {
-    public partial class FormDetector : LiveFeedComponent
+    public partial class FormDetector : Form
     {
         private RecognitionService _recognitionService;
 
         public FormDetector()
         {
             InitializeComponent();
+            Load += (s, a) => RecognitionSingleton.VideoFeed.OnFaceDetected(OnFaceDetected);
+            FormClosing += (s, a) => RecognitionSingleton.VideoFeed.ClearEvents();
 
             _recognitionService = new RecognitionService();
         }
@@ -43,7 +38,7 @@ namespace facerecognition
 
         }
 
-        public override void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, List<Image<Gray, byte>> faces)
+        public void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, List<Image<Gray, byte>> faces)
         {
             imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = image));
             label1.Invoke(new MethodInvoker(() => label1.Text = _recognitionService.RecognizeUser(faces.FirstOrDefault())?.ToString()));
