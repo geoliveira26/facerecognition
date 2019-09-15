@@ -40,6 +40,7 @@
             this.imgCamUser.Location = new System.Drawing.Point(80, 43);
             this.imgCamUser.Name = "imgCamUser";
             this.imgCamUser.Size = new System.Drawing.Size(458, 303);
+            this.imgCamUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgCamUser.TabIndex = 2;
             this.imgCamUser.TabStop = false;
             // 

@@ -41,7 +41,7 @@ namespace facerecognition.Components
 
             var image = mat.ToImage<Bgr, byte>();
             var originalImage = image.Clone();
-            var faces = _cascadeClassifier.DetectMultiScale(image.Convert<Gray, byte>(), 1.1, 3, Size.Empty)
+            var faces = _cascadeClassifier.DetectMultiScale(image.Convert<Gray, byte>(), 1.5, 0, Size.Empty)
                 .ToList()?
                 .Select(face =>
                 {

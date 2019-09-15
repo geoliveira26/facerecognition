@@ -16,6 +16,8 @@ namespace facerecognition
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Connection.ConfigureDatabase();
+            RecognitionSingleton.Users = Connection.RetrieveUsers();
             Application.Run(new FormDetector());
         }
     }

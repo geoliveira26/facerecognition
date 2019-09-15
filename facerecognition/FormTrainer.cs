@@ -55,7 +55,15 @@ namespace facerecognition
         {
             if (_recognitionComplete)
             {
-                _recognitionService.AddUser(new User(textName.Text, _recognizedFaces));
+                if (string.IsNullOrWhiteSpace(textName.Text))
+                {
+                    MessageBox.Show("Preencha o nome");
+                    return;
+                }
+
+                var user = new User(textName.Text, _recognizedFaces);
+                Connection.InsertUser(user);
+                _recognitionService.AddUser(user);
                 CloseForm();
                 return;
             }

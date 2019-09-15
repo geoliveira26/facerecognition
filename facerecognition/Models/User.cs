@@ -14,7 +14,7 @@ namespace facerecognition.Models
 
         public User(List<Image<Gray, byte>> photos)
         {
-            Photos = photos;
+            Photos = photos ?? new List<Image<Gray, byte>>();
         }
 
         public User(string name, List<Image<Gray, byte>> photos) : this(photos)
@@ -22,7 +22,7 @@ namespace facerecognition.Models
             Name = name;
         }
 
-        public User(int id, string name, List<Image<Gray, byte>> photos) : this(name, photos)
+        public User(int id, string name, List<Image<Gray, byte>> photos = null) : this(name, photos)
         {
             Id = id;
         }
