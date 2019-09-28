@@ -1,9 +1,7 @@
 ﻿using Emgu.CV;
-using Emgu.CV.CvEnum;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
 using facerecognition.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -17,7 +15,7 @@ namespace facerecognition
 
         public RecognitionService()
         {
-            _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            _faceRecognizer = new EigenFaceRecognizer(RecognitionSingleton.Users.Count(), double.PositiveInfinity);
             TrainRecognizer();
         }
 
@@ -26,40 +24,34 @@ namespace facerecognition
             if (!RecognitionSingleton.Users.Any())
                 return;
 
-            var faceImages = new List<Mat>();
-            var faceLabels = new List<int>();
+            var users = RecognitionSingleton.Users;
+            var faceImages = new Mat[users.Count];
+            var faceLabels = new int[users.Count];
 
             RecognitionSingleton
                 .Users
                 .ForEach(u => u.Photos.ForEach(p =>
                 {
-                    faceImages.Add(p.Resize(100, 100, Inter.Cubic).Mat);
-                    faceLabels.Add(u.Id);
+                    var index = users.IndexOf(u);
+                    faceImages[index] = p.Mat;
+                    faceLabels[index] = u.Id;
                 }));
 
-            _faceRecognizer.Train(faceImages.ToArray(), faceLabels.ToArray());
-            _faceRecognizer.Write(_recognizerFilePath);
+            _faceRecognizer.Train(faceImages, faceLabels);
 
             _engineTrained = true;
         }
 
-        public void AddUser(User user)
+        public Recognition RecognizeUser(Image<Gray, byte> userImage)
         {
-            RecognitionSingleton.Users.Add(user);
-            TrainRecognizer();
-        }
-
-        public int? RecognizeUser(Image<Gray, byte> userImage)
-        {
-            /*  Stream stream = new MemoryStream();
-              stream.Write(userImage, 0, userImage.Length);
-              var faceImage = new Image<Gray, byte>(new Bitmap(stream));*/
-            //_faceRecognizer.Read(_recognizerFilePath);
             if (!_engineTrained || userImage == null)
                 return null;
 
-            var result = _faceRecognizer.Predict(userImage.Resize(100, 100, Inter.Cubic).Mat);
-            return result.Label;
+            var result = _faceRecognizer.Predict(userImage);
+            if (result.Label == 0)
+                return null;
+
+            return new Recognition { Prediction = result, User = RecognitionSingleton.Users.SingleOrDefault(_ => _.Id == result.Label) };
         }
     }
 }

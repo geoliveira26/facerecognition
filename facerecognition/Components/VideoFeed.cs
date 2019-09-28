@@ -13,12 +13,11 @@ namespace facerecognition.Components
     {
         //private List<Image<Bgr, byte>> _faces;
         private VideoCapture _videoCapture;
-        private CascadeClassifier _cascadeClassifier;
-        private Action<Image<Bgr, byte>, Image<Bgr, byte>, List<Image<Gray, byte>>> _onFaceDetected;
+        private Action<Image<Bgr, byte>, Image<Bgr, byte>, Image<Gray, byte>> _onFaceDetected;
 
         public VideoFeed()
         {
-            _cascadeClassifier = new CascadeClassifier($"{Application.StartupPath}/assets/haarcascade_frontalface_alt_tree.xml");
+            RecognitionSingleton.CascadeClassifier = new CascadeClassifier($"{Application.StartupPath}/assets/haarcascade_frontalface_alt2.xml");
             _videoCapture = new VideoCapture();
             _videoCapture.ImageGrabbed += ProcessFrame;
             _videoCapture.Start();
@@ -26,7 +25,7 @@ namespace facerecognition.Components
 
         public void ClearEvents() => _onFaceDetected = null;
 
-        public void OnFaceDetected(Action<Image<Bgr, byte>, Image<Bgr, byte>, List<Image<Gray, byte>>> onFaceDetected)
+        public void OnFaceDetected(Action<Image<Bgr, byte>, Image<Bgr, byte>, Image<Gray, byte>> onFaceDetected)
         {
             _onFaceDetected = onFaceDetected;
         }
@@ -41,18 +40,17 @@ namespace facerecognition.Components
 
             var image = mat.ToImage<Bgr, byte>();
             var originalImage = image.Clone();
-            var faces = _cascadeClassifier.DetectMultiScale(image.Convert<Gray, byte>(), 1.5, 0, Size.Empty)
-                .ToList()?
+            var faceDetected = RecognitionSingleton.GetFaceRectangles(image)
                 .Select(face =>
                 {
                     var rect = image.GetSubRect(face).Clone().Convert<Gray, byte>();
                     image.Draw(face, new Bgr(Color.BlueViolet), 2);
                     return rect;
                 })?
-                .ToList();
+                .FirstOrDefault();
 
             if(_onFaceDetected != null)
-                _onFaceDetected(image, originalImage, faces ?? new List<Image<Gray, byte>>());
+                _onFaceDetected(image, originalImage, faceDetected);
         }
     }
 }

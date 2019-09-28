@@ -41,3 +41,5 @@ C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\zh-tw\ZedGraph.resource
 C:\gitprojects\facerecognition\facerecognition\obj\Debug\facerecognition.csproj.CopyComplete
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.exe
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.pdb
+C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\assets\haarcascade_frontalcatface_extended.xml
+C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\assets\haarcascade_frontalface_alt2.xml

@@ -1,28 +1,27 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
-using System.Collections.Generic;
 
 namespace facerecognition.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = RecognitionSingleton.Users.Count + 1;
 
         public string Name { get; set; }
 
-        public List<Image<Gray, byte>> Photos { get; set; } = new List<Image<Gray, byte>>();
+        public Image<Gray, byte> Face { get; set; }
 
-        public User(List<Image<Gray, byte>> photos)
+        public User(Image<Gray, byte> face)
         {
-            Photos = photos ?? new List<Image<Gray, byte>>();
+            Face = face;
         }
 
-        public User(string name, List<Image<Gray, byte>> photos) : this(photos)
+        public User(string name, Image<Gray, byte> face) : this(face)
         {
             Name = name;
         }
 
-        public User(int id, string name, List<Image<Gray, byte>> photos = null) : this(name, photos)
+        public User(int id, string name, Image<Gray, byte> face = null) : this(name, face)
         {
             Id = id;
         }

@@ -1,8 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace facerecognition
@@ -38,10 +36,10 @@ namespace facerecognition
 
         }
 
-        public void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, List<Image<Gray, byte>> faces)
+        public void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, Image<Gray, byte> face)
         {
             imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = image));
-            label1.Invoke(new MethodInvoker(() => label1.Text = _recognitionService.RecognizeUser(faces.FirstOrDefault())?.ToString()));
+            //label1.Invoke(new MethodInvoker(() => label1.Text = _recognitionService.RecognizeUser(faces.FirstOrDefault())?.Name));
         }
     }
 }

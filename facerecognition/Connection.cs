@@ -1,14 +1,10 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using facerecognition.Models;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace facerecognition
 {
@@ -31,18 +27,8 @@ namespace facerecognition
                 CREATE TABLE photo_user
                 (
                     id int not null identity(1, 1) primary key,
-		            name varchar(250) not null
-                )
-           ");
-
-            ExecuteScalar(@"
-                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='photo' and xtype='U')
-                CREATE TABLE photo
-                (
-                    id int not null identity(1, 1) primary key,
-		            user_id int not null,
-                    photo varbinary(max),
-                    foreign key (user_id) references photo_user(id)
+		            name varchar(250) not null,
+                    face varbinary(max) not null
                 )
            ");
         }
@@ -51,61 +37,36 @@ namespace facerecognition
         {
             var users = new List<User>();
 
-            var command = @"
-               select u.id as user_id, u.name as user_name, p.photo as photo
-               from photo_user u inner join photo p on u.id = p.user_id
-            ";
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString);
-            SqlCommand cmd = new SqlCommand(command, connection);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
+            var cmd = new SqlCommand("select * from user", connection);
+            var da = new SqlDataAdapter(cmd);
+            var dt = new DataTable();
             da.Fill(dt);
 
             foreach (DataRow dr in dt.Rows)
             {
-                User user;
-                if(!users.Any(u => u.Id == (int)dr["user_id"]))
-                {
-                    user = new User((int)dr["user_id"], (string)dr["user_name"]);
-                    users.Add(user);
-                }
-                else
-                {
-                    user = users.First(u => u.Id == (int)dr["user_id"]);
-                }
-
-                var arr = (byte[])dr["photo"];
-                var image = new Image<Gray, byte>(200, 200);
+                var user = new User((int)dr["id"], (string)dr["name"]);
+                users.Add(user);
+                var arr = (byte[])dr["face"];
+                var image = new Image<Gray, byte>(100, 100);
                 image.Bytes = arr;
-                user.Photos.Add(image);
+                user.Face = image;
             }
 
             return users;
         }
 
-        public static void InsertPhoto(int userId, Image<Gray, byte> image)
+        public static void InsertUser(User user)
         {
-            var resized = image.Resize(200, 200, Emgu.CV.CvEnum.Inter.Cubic);
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString))
             {
                 connection.Open();
-                using (var comm = new SqlCommand($"insert into photo values({userId}, @binary)", connection))
+                using (var comm = new SqlCommand($"insert into user(name, face) values({user.Name}, @binary)", connection))
                 {
-                    comm.Parameters.Add("@binary", SqlDbType.VarBinary, resized.Bytes.Length).Value = resized.Bytes;
+                    comm.Parameters.Add("@binary", SqlDbType.VarBinary, user.Face.Bytes.Length).Value = user.Face.Bytes;
                     comm.ExecuteNonQuery();
                 }
             }
-        }
-
-        public static void InsertUser(User user)
-        {
-            var id = (int)ExecuteScalar($@"
-                insert into photo_user(name)
-                output inserted.id
-                values('{user.Name}')
-            ");
-
-            user.Photos.ForEach(i => InsertPhoto(id, i));
         }
     }
 }
