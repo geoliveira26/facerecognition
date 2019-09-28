@@ -34,6 +34,8 @@
             this.image1 = new Emgu.CV.UI.ImageBox();
             this.textName = new System.Windows.Forms.TextBox();
             this.labelName = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnReset = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgUserCam)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.image1)).BeginInit();
             this.SuspendLayout();
@@ -42,7 +44,7 @@
             // 
             this.imgUserCam.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.imgUserCam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imgUserCam.Location = new System.Drawing.Point(14, 138);
+            this.imgUserCam.Location = new System.Drawing.Point(15, 181);
             this.imgUserCam.Name = "imgUserCam";
             this.imgUserCam.Size = new System.Drawing.Size(319, 243);
             this.imgUserCam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -55,7 +57,7 @@
             this.buttonRecognize.Enabled = false;
             this.buttonRecognize.Location = new System.Drawing.Point(183, 13);
             this.buttonRecognize.Name = "buttonRecognize";
-            this.buttonRecognize.Size = new System.Drawing.Size(150, 36);
+            this.buttonRecognize.Size = new System.Drawing.Size(151, 36);
             this.buttonRecognize.TabIndex = 3;
             this.buttonRecognize.Text = "buttonRecognize";
             this.buttonRecognize.UseVisualStyleBackColor = true;
@@ -64,7 +66,7 @@
             // image1
             // 
             this.image1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.image1.Location = new System.Drawing.Point(216, 55);
+            this.image1.Location = new System.Drawing.Point(111, 74);
             this.image1.Name = "image1";
             this.image1.Size = new System.Drawing.Size(117, 77);
             this.image1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -87,11 +89,32 @@
             this.labelName.TabIndex = 8;
             this.labelName.Text = "Nome";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 97);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(96, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Face reconhecida:";
+            // 
+            // btnReset
+            // 
+            this.btnReset.Enabled = false;
+            this.btnReset.Location = new System.Drawing.Point(233, 74);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(101, 77);
+            this.btnReset.TabIndex = 10;
+            this.btnReset.Text = "Resetar";
+            this.btnReset.UseVisualStyleBackColor = true;
+            // 
             // FormTrainer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(344, 392);
+            this.ClientSize = new System.Drawing.Size(344, 436);
+            this.Controls.Add(this.btnReset);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.textName);
             this.Controls.Add(this.image1);
@@ -114,5 +137,7 @@
         private Emgu.CV.UI.ImageBox image1;
         private System.Windows.Forms.TextBox textName;
         private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnReset;
     }
 }

@@ -30,12 +30,12 @@ namespace facerecognition
 
             RecognitionSingleton
                 .Users
-                .ForEach(u => u.Photos.ForEach(p =>
+                .ForEach(u =>
                 {
                     var index = users.IndexOf(u);
-                    faceImages[index] = p.Mat;
+                    faceImages[index] = u.Face.Mat;
                     faceLabels[index] = u.Id;
-                }));
+                });
 
             _faceRecognizer.Train(faceImages, faceLabels);
 
