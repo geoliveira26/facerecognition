@@ -75,7 +75,11 @@ namespace facerecognition.Components
             return image?.GetSubRect(rectangle.Value).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
         }
 
-        public void Subscribe(Action<VideoFeed> feed) => _subscribes.Add(feed);
+        public void Subscribe(Action<VideoFeed> feed)
+        {
+            _subscribes.Add(feed);
+            Start();
+        }
 
         public void Unsubscribe(Action<VideoFeed> feed) => _subscribes.Remove(feed);
     }

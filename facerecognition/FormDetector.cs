@@ -9,14 +9,13 @@ namespace facerecognition
     public partial class FormDetector : Form
     {
         private RecognitionService _recognitionService;
+        private bool _lockCam;
 
         public FormDetector()
         {
             InitializeComponent();
             Load += (s, a) => RecognitionSingleton.VideoFeed.Subscribe(OnFaceDetected);
             FormClosing += (s, a) => RecognitionSingleton.VideoFeed.Unsubscribe(OnFaceDetected);
-
-            RecognitionSingleton.VideoFeed.Start();
 
             _recognitionService = new RecognitionService();
         }
@@ -41,16 +40,42 @@ namespace facerecognition
 
         public void OnFaceDetected(VideoFeed feed)
         {
-            imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = feed.CamImageWithFace ?? feed.CamImage));
+            if (_lockCam)
+                return;
+
+            Recognize(feed.CamImageWithFace ?? feed.CamImage, feed.LastRecognizedFace);
+        }
+
+        private void Recognize(Image<Bgr, byte> image, Image<Gray, byte> face)
+        {
+            imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = image));
             label1.Invoke(new MethodInvoker(() =>
             {
-                var recognition = _recognitionService.RecognizeUser(feed.LastRecognizedFace);
-                if (recognition == null || recognition.Prediction.Distance == 0)
-                    return;
-
-                label1.Text = recognition.User?.Name;
-                label2.Text = recognition.Prediction.Distance.ToString();
+                var recognition = _recognitionService.RecognizeUser(face);
+                if (recognition != null)
+                {
+                    label1.Text = recognition.User?.Name;
+                    label2.Text = recognition.Prediction.Distance.ToString();
+                }
             }));
+        }
+
+        private void imgCamUser_Click(object sender, EventArgs e)
+        {
+            RecognitionSingleton.ChooseFace((image, face) =>
+            {
+                _lockCam = true;
+                RecognitionSingleton.VideoFeed.Pause();
+                Recognize(image, face);
+                btnClear.Visible = true;
+            });
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            _lockCam = false;
+            RecognitionSingleton.VideoFeed.Start();
+            btnClear.Invoke(new MethodInvoker(() => btnClear.Visible = false));
         }
     }
 }

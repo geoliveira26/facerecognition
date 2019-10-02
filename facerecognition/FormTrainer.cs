@@ -100,24 +100,7 @@ namespace facerecognition
 
         private void imgUserCam_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dlg = new OpenFileDialog())
-            {
-                dlg.Title = "Open Image";
-                dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
-
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    var image = new Image<Bgr, byte>(dlg.FileName);
-                    var face = RecognitionSingleton.VideoFeed.GetFaceOnImage(image);
-                    if (face == null)
-                    {
-                        MessageBox.Show("Nenhuma face detectada");
-                        return;
-                    }
-                    
-                    SetFace(image, face);
-                }
-            }
+            RecognitionSingleton.ChooseFace((image, face) => SetFace(image, face));
         }
 
         private void btnReset_Click(object sender, EventArgs e)

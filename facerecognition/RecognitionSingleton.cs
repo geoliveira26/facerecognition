@@ -20,5 +20,27 @@ namespace facerecognition
         public static FaceRecognizer FaceRecognizer;
 
         public static VideoFeed VideoFeed = new VideoFeed();
+
+        public static void ChooseFace(Action<Image<Bgr, byte>, Image<Gray, byte>> afterChoose)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Title = "Open Image";
+                dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    var image = new Image<Bgr, byte>(dlg.FileName);
+                    var face = RecognitionSingleton.VideoFeed.GetFaceOnImage(image);
+                    if (face == null)
+                    {
+                        MessageBox.Show("Nenhuma face detectada");
+                        return;
+                    }
+
+                    afterChoose(image, face);
+                }
+            }
+        }
     }
 }
