@@ -61,7 +61,7 @@ namespace facerecognition
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString))
             {
                 connection.Open();
-                using (var comm = new SqlCommand($"insert into user_face(name, face) values({user.Name}, @binary)", connection))
+                using (var comm = new SqlCommand($"insert into user_face(name, face) values('{user.Name}', @binary)", connection))
                 {
                     comm.Parameters.Add("@binary", SqlDbType.VarBinary, user.Face.Bytes.Length).Value = user.Face.Bytes;
                     comm.ExecuteNonQuery();

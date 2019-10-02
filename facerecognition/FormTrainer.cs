@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using facerecognition.Components;
 using facerecognition.Models;
 using System;
 using System.Drawing;
@@ -20,8 +21,8 @@ namespace facerecognition
         {
             InitializeComponent();
 
-            Load += (s, a) => RecognitionSingleton.VideoFeed.OnFaceDetected(OnFaceDetected);
-            FormClosing += (s, a) => RecognitionSingleton.VideoFeed.ClearEvents();
+            Load += (s, a) => RecognitionSingleton.VideoFeed.Subscribe(OnFaceDetected);
+            FormClosing += (s, a) => RecognitionSingleton.VideoFeed.Unsubscribe(OnFaceDetected);
 
             _recognitionService = new RecognitionService();
         }
@@ -30,6 +31,9 @@ namespace facerecognition
         {
             image1.Invoke(new MethodInvoker(() => image1.Image = face));
             _recognitionComplete = true;
+            btnReset.Enabled = true;
+            RecognitionSingleton.VideoFeed.Pause();
+
             _recognizedFace = face;
             buttonRecognize.Invoke(new MethodInvoker(() =>
             {
@@ -45,7 +49,7 @@ namespace facerecognition
         {
             if (!_recognitionComplete)
             {
-                SetFace(_originalImage, _camFace);
+                SetFace(RecognitionSingleton.VideoFeed.CamImage, RecognitionSingleton.VideoFeed.LastRecognizedFace);
                 return;
             }
 
@@ -62,6 +66,11 @@ namespace facerecognition
             return;
         }
 
+        private void CompleteRecognition()
+        {
+            
+        }
+
         private void CloseForm()
         {
             Hide();
@@ -70,19 +79,17 @@ namespace facerecognition
             Close();
         }
         
-        public void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, Image<Gray, byte> face)
+        public void OnFaceDetected(VideoFeed feed)
         {
             if (_recognitionComplete)
                 return;
 
             buttonRecognize.Invoke(new MethodInvoker(() =>
             {
-                imgUserCam.Image = image;
-                _originalImage = originalImage;
-                _camFace = face != null ? face : _recognizedFace;
-                buttonRecognize.Enabled = face != null;
-                buttonRecognize.BackColor = face != null ? Color.Blue : Color.Red;
-                buttonRecognize.Text = face != null ? "Guardar reconhecimento" : "Face não reconhecida";
+                imgUserCam.Image = feed.CamImageWithFace ?? feed.CamImage;
+                buttonRecognize.Enabled = feed.LastRecognizedFace != null;
+                buttonRecognize.BackColor = feed.LastRecognizedFace != null ? Color.Blue : Color.Red;
+                buttonRecognize.Text = feed.LastRecognizedFace != null ? "Guardar reconhecimento" : "Face não reconhecida";
             }));
         }
 
@@ -101,7 +108,7 @@ namespace facerecognition
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     var image = new Image<Bgr, byte>(dlg.FileName);
-                    var face = RecognitionSingleton.GetFace(image);
+                    var face = RecognitionSingleton.VideoFeed.GetFaceOnImage(image);
                     if (face == null)
                     {
                         MessageBox.Show("Nenhuma face detectada");
@@ -111,6 +118,13 @@ namespace facerecognition
                     SetFace(image, face);
                 }
             }
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            RecognitionSingleton.VideoFeed.Start();
+            _recognitionComplete = false;
+            image1.Image = null;
         }
     }
 }

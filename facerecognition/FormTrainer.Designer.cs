@@ -107,6 +107,7 @@
             this.btnReset.TabIndex = 10;
             this.btnReset.Text = "Resetar";
             this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // FormTrainer
             // 

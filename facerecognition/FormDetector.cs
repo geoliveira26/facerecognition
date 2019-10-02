@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using facerecognition.Components;
 using System;
 using System.Windows.Forms;
 
@@ -12,8 +13,10 @@ namespace facerecognition
         public FormDetector()
         {
             InitializeComponent();
-            Load += (s, a) => RecognitionSingleton.VideoFeed.OnFaceDetected(OnFaceDetected);
-            FormClosing += (s, a) => RecognitionSingleton.VideoFeed.ClearEvents();
+            Load += (s, a) => RecognitionSingleton.VideoFeed.Subscribe(OnFaceDetected);
+            FormClosing += (s, a) => RecognitionSingleton.VideoFeed.Unsubscribe(OnFaceDetected);
+
+            RecognitionSingleton.VideoFeed.Start();
 
             _recognitionService = new RecognitionService();
         }
@@ -36,10 +39,18 @@ namespace facerecognition
 
         }
 
-        public void OnFaceDetected(Image<Bgr, byte> image, Image<Bgr, byte> originalImage, Image<Gray, byte> face)
+        public void OnFaceDetected(VideoFeed feed)
         {
-            imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = image));
-            //label1.Invoke(new MethodInvoker(() => label1.Text = _recognitionService.RecognizeUser(faces.FirstOrDefault())?.Name));
+            imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = feed.CamImageWithFace ?? feed.CamImage));
+            label1.Invoke(new MethodInvoker(() =>
+            {
+                var recognition = _recognitionService.RecognizeUser(feed.LastRecognizedFace);
+                if (recognition == null || recognition.Prediction.Distance == 0)
+                    return;
+
+                label1.Text = recognition.User?.Name;
+                label2.Text = recognition.Prediction.Distance.ToString();
+            }));
         }
     }
 }

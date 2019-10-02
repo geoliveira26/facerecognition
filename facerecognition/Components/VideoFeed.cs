@@ -11,23 +11,28 @@ namespace facerecognition.Components
 {
     public class VideoFeed
     {
-        //private List<Image<Bgr, byte>> _faces;
+        public Image<Bgr, byte> CamImage { get; private set; }
+        public Image<Bgr, byte> CamImageWithFace { get; private set; }
+        public Image<Gray, byte> LastRecognizedFace { get; private set; }
+
+        private CascadeClassifier _classifier = new CascadeClassifier($"{Application.StartupPath}/assets/haarcascade_frontalface_alt2.xml");
         private VideoCapture _videoCapture;
-        private Action<Image<Bgr, byte>, Image<Bgr, byte>, Image<Gray, byte>> _onFaceDetected;
+        private List<Action<VideoFeed>> _subscribes = new List<Action<VideoFeed>>();
 
         public VideoFeed()
         {
-            RecognitionSingleton.CascadeClassifier = new CascadeClassifier($"{Application.StartupPath}/assets/haarcascade_frontalface_alt2.xml");
             _videoCapture = new VideoCapture();
             _videoCapture.ImageGrabbed += ProcessFrame;
             _videoCapture.Start();
         }
 
-        public void ClearEvents() => _onFaceDetected = null;
+        public void Start() => _videoCapture.Start();
 
-        public void OnFaceDetected(Action<Image<Bgr, byte>, Image<Bgr, byte>, Image<Gray, byte>> onFaceDetected)
+        public void Pause() => _videoCapture.Pause();
+
+        public void ClearEvents()
         {
-            _onFaceDetected = onFaceDetected;
+
         }
 
         private void ProcessFrame(object sender, EventArgs e)
@@ -37,20 +42,41 @@ namespace facerecognition.Components
 
             var mat = new Mat();
             _videoCapture.Retrieve(mat, 0);
+            CamImage = mat.ToImage<Bgr, byte>();
 
-            var image = mat.ToImage<Bgr, byte>();
-            var originalImage = image.Clone();
-            var faceDetected = RecognitionSingleton.GetFaceRectangles(image)
-                .Select(face =>
-                {
-                    var rect = image.GetSubRect(face).Clone().Convert<Gray, byte>();
-                    image.Draw(face, new Bgr(Color.BlueViolet), 2);
-                    return rect;
-                })?
-                .FirstOrDefault();
+            var faceRectangle = GetFaceRectangle(CamImage);
+            if (!faceRectangle.IsEmpty)
+            {
+                LastRecognizedFace = GetFaceOnImage(CamImage, faceRectangle);
+                CamImageWithFace = CamImage.Clone();
+                CamImageWithFace.Draw(faceRectangle, new Bgr(Color.BlueViolet), 2);
+            }
+            else
+            {
+                CamImageWithFace = null;
+                LastRecognizedFace = null;
+            }
 
-            if(_onFaceDetected != null)
-                _onFaceDetected(image, originalImage, faceDetected);
+            foreach (var subscribe in _subscribes)
+                subscribe(this);
         }
+
+        public Rectangle GetFaceRectangle(Image<Bgr, byte> image)
+        {
+            return _classifier.DetectMultiScale(image.Mat, 1.1, 10).FirstOrDefault();
+        }
+
+        public Image<Gray, byte> GetFaceOnImage(Image<Bgr, byte> image, Rectangle? rectangle = null)
+        {
+            rectangle = rectangle ?? GetFaceRectangle(image);
+            if (rectangle.Value.IsEmpty)
+                return null;
+
+            return image?.GetSubRect(rectangle.Value).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+        }
+
+        public void Subscribe(Action<VideoFeed> feed) => _subscribes.Add(feed);
+
+        public void Unsubscribe(Action<VideoFeed> feed) => _subscribes.Remove(feed);
     }
 }
