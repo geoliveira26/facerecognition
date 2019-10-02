@@ -81,6 +81,10 @@ namespace facerecognition.Components
             Start();
         }
 
-        public void Unsubscribe(Action<VideoFeed> feed) => _subscribes.Remove(feed);
+        public void Unsubscribe(Action<VideoFeed> feed)
+        {
+            Pause();
+            _subscribes.Remove(feed);
+        }
     }
 }
