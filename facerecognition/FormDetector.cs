@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using facerecognition.Components;
+using facerecognition.Models;
 using System;
 using System.Windows.Forms;
 
@@ -9,6 +10,7 @@ namespace facerecognition
     public partial class FormDetector : Form
     {
         private RecognitionService _recognitionService;
+        private Recognition _lastRecognition;
         private bool _lockCam;
 
         public FormDetector()
@@ -51,11 +53,14 @@ namespace facerecognition
             imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = image));
             label1.Invoke(new MethodInvoker(() =>
             {
+                buttonEnter.Visible = false;
                 var recognition = _recognitionService.RecognizeUser(face);
                 if (recognition != null)
                 {
+                    _lastRecognition = recognition;
                     label1.Text = recognition.User?.Name;
                     label2.Text = recognition.Prediction.Distance.ToString();
+                    buttonEnter.Visible = true;
                 }
             }));
         }
@@ -76,6 +81,12 @@ namespace facerecognition
             _lockCam = false;
             RecognitionSingleton.VideoFeed.Start();
             btnClear.Invoke(new MethodInvoker(() => btnClear.Visible = false));
+        }
+
+        private void buttonEnter_Click(object sender, EventArgs e)
+        {
+            var form = new MenuForm(_lastRecognition?.User);
+            form.ShowDialog();
         }
     }
 }

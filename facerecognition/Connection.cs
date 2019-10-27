@@ -26,9 +26,11 @@ namespace facerecognition
                 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='user_face' and xtype='U')
                 CREATE TABLE user_face
                 (
+
                     id int not null identity(1, 1) primary key,
 		            name varchar(250) not null,
-                    face varbinary(max) not null
+                    face varbinary(max) not null,
+                    access int not null
                 )
            ");
         }
@@ -45,7 +47,7 @@ namespace facerecognition
 
             foreach (DataRow dr in dt.Rows)
             {
-                var user = new User((int)dr["id"], (string)dr["name"]);
+                var user = new User((int)dr["id"], (string)dr["name"], null, (AccessLevel)dr["access"]);
                 users.Add(user);
                 var arr = (byte[])dr["face"];
                 var image = new Image<Gray, byte>(100, 100);
@@ -61,7 +63,7 @@ namespace facerecognition
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString))
             {
                 connection.Open();
-                using (var comm = new SqlCommand($"insert into user_face(name, face) values('{user.Name}', @binary)", connection))
+                using (var comm = new SqlCommand($"insert into user_face(name, access, face) values('{user.Name}', {(int)user.Access}, @binary)", connection))
                 {
                     comm.Parameters.Add("@binary", SqlDbType.VarBinary, user.Face.Bytes.Length).Value = user.Face.Bytes;
                     comm.ExecuteNonQuery();

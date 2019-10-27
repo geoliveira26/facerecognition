@@ -59,11 +59,20 @@ namespace facerecognition
                 return;
             }
 
-            var user = new User(textName.Text, _recognizedFace);
+            var user = new User(textName.Text, _recognizedFace, GetAccess());
             Connection.InsertUser(user);
             RecognitionSingleton.Users.Add(user);
             CloseForm();
             return;
+        }
+
+        private AccessLevel GetAccess()
+        {
+            if (radioGovernador.Checked)
+                return AccessLevel.Governador;
+            if (radioPrefeito.Checked)
+                return AccessLevel.Prefeito;
+            return AccessLevel.Presidente;
         }
 
         private void CompleteRecognition()

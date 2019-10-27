@@ -43,3 +43,4 @@ C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.exe
 C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.pdb
 C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\assets\haarcascade_frontalcatface_extended.xml
 C:\gitprojects\FaceRecognition\facerecognition\bin\Debug\assets\haarcascade_frontalface_alt2.xml
+C:\gitprojects\FaceRecognition\facerecognition\obj\Debug\facerecognition.MenuForm.resources

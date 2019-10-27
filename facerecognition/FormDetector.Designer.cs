@@ -36,6 +36,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.buttonEnter = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgCamUser)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,11 +107,23 @@
             this.label4.TabIndex = 7;
             this.label4.Text = "Nome:";
             // 
+            // buttonEnter
+            // 
+            this.buttonEnter.Location = new System.Drawing.Point(476, 134);
+            this.buttonEnter.Name = "buttonEnter";
+            this.buttonEnter.Size = new System.Drawing.Size(184, 23);
+            this.buttonEnter.TabIndex = 9;
+            this.buttonEnter.Text = "Entrar";
+            this.buttonEnter.UseVisualStyleBackColor = true;
+            this.buttonEnter.Visible = false;
+            this.buttonEnter.Click += new System.EventHandler(this.buttonEnter_Click);
+            // 
             // FormDetector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(672, 329);
+            this.Controls.Add(this.buttonEnter);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnClear);
@@ -136,6 +149,7 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button buttonEnter;
     }
 }
 

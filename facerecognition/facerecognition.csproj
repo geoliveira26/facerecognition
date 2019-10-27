@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessLevel.cs" />
     <Compile Include="Components\VideoFeed.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="FormDetector.cs">
@@ -61,10 +62,17 @@
     <Compile Include="FormTrainer.Designer.cs">
       <DependentUpon>FormTrainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="MenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuForm.Designer.cs">
+      <DependentUpon>MenuForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\Recognition.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Prompt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecognitionService.cs" />
     <Compile Include="RecognitionSingleton.cs" />
@@ -73,6 +81,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTrainer.resx">
       <DependentUpon>FormTrainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menuform.resx">
+      <DependentUpon>MenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

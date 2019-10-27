@@ -36,6 +36,10 @@
             this.labelName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnReset = new System.Windows.Forms.Button();
+            this.radioGovernador = new System.Windows.Forms.RadioButton();
+            this.radioPrefeito = new System.Windows.Forms.RadioButton();
+            this.radioPresidente = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgUserCam)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.image1)).BeginInit();
             this.SuspendLayout();
@@ -66,9 +70,9 @@
             // image1
             // 
             this.image1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.image1.Location = new System.Drawing.Point(111, 74);
+            this.image1.Location = new System.Drawing.Point(110, 73);
             this.image1.Name = "image1";
-            this.image1.Size = new System.Drawing.Size(117, 77);
+            this.image1.Size = new System.Drawing.Size(117, 86);
             this.image1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.image1.TabIndex = 4;
             this.image1.TabStop = false;
@@ -92,7 +96,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 97);
+            this.label1.Location = new System.Drawing.Point(107, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(96, 13);
             this.label1.TabIndex = 9;
@@ -101,19 +105,63 @@
             // btnReset
             // 
             this.btnReset.Enabled = false;
-            this.btnReset.Location = new System.Drawing.Point(233, 74);
+            this.btnReset.Location = new System.Drawing.Point(233, 72);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(101, 77);
+            this.btnReset.Size = new System.Drawing.Size(101, 86);
             this.btnReset.TabIndex = 10;
             this.btnReset.Text = "Resetar";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // radioGovernador
+            // 
+            this.radioGovernador.AutoSize = true;
+            this.radioGovernador.Checked = true;
+            this.radioGovernador.Location = new System.Drawing.Point(20, 70);
+            this.radioGovernador.Name = "radioGovernador";
+            this.radioGovernador.Size = new System.Drawing.Size(81, 17);
+            this.radioGovernador.TabIndex = 11;
+            this.radioGovernador.TabStop = true;
+            this.radioGovernador.Text = "Governador";
+            this.radioGovernador.UseVisualStyleBackColor = true;
+            // 
+            // radioPrefeito
+            // 
+            this.radioPrefeito.AutoSize = true;
+            this.radioPrefeito.Location = new System.Drawing.Point(20, 98);
+            this.radioPrefeito.Name = "radioPrefeito";
+            this.radioPrefeito.Size = new System.Drawing.Size(61, 17);
+            this.radioPrefeito.TabIndex = 12;
+            this.radioPrefeito.Text = "Prefeito";
+            this.radioPrefeito.UseVisualStyleBackColor = true;
+            // 
+            // radioPresidente
+            // 
+            this.radioPresidente.AutoSize = true;
+            this.radioPresidente.Location = new System.Drawing.Point(20, 131);
+            this.radioPresidente.Name = "radioPresidente";
+            this.radioPresidente.Size = new System.Drawing.Size(75, 17);
+            this.radioPresidente.TabIndex = 13;
+            this.radioPresidente.Text = "Presidente";
+            this.radioPresidente.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(11, 53);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(96, 105);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Acesso";
             // 
             // FormTrainer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(344, 436);
+            this.Controls.Add(this.radioPresidente);
+            this.Controls.Add(this.radioPrefeito);
+            this.Controls.Add(this.radioGovernador);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelName);
@@ -121,6 +169,7 @@
             this.Controls.Add(this.image1);
             this.Controls.Add(this.buttonRecognize);
             this.Controls.Add(this.imgUserCam);
+            this.Controls.Add(this.groupBox1);
             this.Name = "FormTrainer";
             this.Text = "FormTrainer";
             this.Load += new System.EventHandler(this.FormTrainer_Load);
@@ -140,5 +189,9 @@
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.RadioButton radioGovernador;
+        private System.Windows.Forms.RadioButton radioPrefeito;
+        private System.Windows.Forms.RadioButton radioPresidente;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
