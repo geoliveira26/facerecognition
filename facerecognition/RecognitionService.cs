@@ -51,7 +51,7 @@ namespace facerecognition
             if (result.Label == 0)
                 return null;
 
-            return new Recognition { Prediction = result, User = RecognitionSingleton.Users.SingleOrDefault(_ => _.Id == result.Label) };
+            return new Recognition { Prediction = result, User = RecognitionSingleton.Users.FirstOrDefault(_ => _.Id == result.Label) };
         }
     }
 }

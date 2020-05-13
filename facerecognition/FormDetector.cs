@@ -53,14 +53,20 @@ namespace facerecognition
             imgCamUser.Invoke(new MethodInvoker(() => imgCamUser.Image = image));
             label1.Invoke(new MethodInvoker(() =>
             {
-                buttonEnter.Visible = false;
                 var recognition = _recognitionService.RecognizeUser(face);
                 if (recognition != null)
                 {
                     _lastRecognition = recognition;
                     label1.Text = recognition.User?.Name;
                     label2.Text = recognition.Prediction.Distance.ToString();
-                    buttonEnter.Visible = true;
+                    if(recognition.Prediction.Distance < 3000)
+                        buttonEnter.Visible = true;
+                    else
+                        buttonEnter.Visible = false;
+                }
+                else
+                {
+                    buttonEnter.Visible = false;
                 }
             }));
         }
